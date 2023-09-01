@@ -14,6 +14,6 @@
 	</div>
 	<div class="column box has-text-centered">
 		<h1 class="title is-4">Add a Park</h1>
-		<ParkForm/>
+		<ParkForm />
 	</div>
 </div>

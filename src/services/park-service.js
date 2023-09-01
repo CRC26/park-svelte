@@ -50,7 +50,7 @@ export const parkService = {
 	},
 
 	reload() {
-		const parkCredentials = localStorage.donation;
+		const parkCredentials = localStorage.park;
 		if (parkCredentials) {
 			const savedUser = JSON.parse(parkCredentials);
 			user.set({

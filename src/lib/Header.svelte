@@ -1,5 +1,6 @@
 <script>
 	import TitleBar from './TitleBar.svelte';
+	import WelcomeNavigator from './WelcomeNavigator.svelte';
 </script>
 
 <div class="columns is-vcentered">

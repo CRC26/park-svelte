@@ -2,28 +2,30 @@
 <script>
   // @ts-nocheck
 	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
 	import { parkService } from "../services/park-service"
 
   let parkName = "";
   let countyName = "";
   let lat = "";
   let lng = "";
-  let errorMessage = "";
+
+  onMount(async () => {
+    parkList = await parkService.getParks();
+  });
 
   async function addPark() {
-      const park ={
-        parkName: parkName,
-        countyName: countyName,
-        lat: lat,
-        lng: lng,
-      };
-      const success = await parkService.addPark(park);
-    if (success) {
-      goto("/report");
+		if (parkName && parkCounty && lat && lng) {
+      const success = await parkService.addPark(parkName, countyName, lat, lng)
+      if (!success) {
+        message = "Park not Added - some error occurred";
+        return;
+      }
+      message = `Thanks! You added ${parkNmae} to the list`;
     } else {
-      errorMessage = "Error Trying to add Park";
+      message = "Please fill out form";
     }
-  }
+	}
 
 </script>
 <form on:submit|preventDefault={addPark}>
@@ -37,19 +39,16 @@
           </div>
       <div class="field">
         <label for="lat" class="label">Latitude</label>
-        <input bind:value={lat} id="lat" class="input" type="text" placeholder="Enter Latitude" name="lat">
+        <input bind:value={lat} id="lat" class="input" type="number" placeholder="Enter Latitude" name="lat">
       </div>
       <div class="field">
         <label for="lng" class="label">Longitude</label>
-        <input bind:value={lng} id="lng" class="input" type="lng" placeholder="Enter Longitude" name="lng">
+        <input bind:value={lng} id="lng" class="input" type="number" placeholder="Enter Longitude" name="lng">
       </div>
-      <div class="field is-grouped">
-        <button on:click={addPark(parkName, countyName, lat, lng)} class="button is-link">Add Park</button>
+      <div class="field">
+        <div class="control">
+          <button class="button is-link is light">Add Park</button>
+        </div>
       </div>
   </form>
-  {#if errorMessage}
-  <div class="section">
-    {errorMessage}
-  </div>
-{/if}
 

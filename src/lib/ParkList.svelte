@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import { parkService } from "../services/park-service";
-  import { onMount } from "svelte";
+import { onMount } from "svelte";
 
 
   let parkList = [];
@@ -22,7 +22,10 @@ import { parkService } from "../services/park-service";
     <tbody>
      {#each parkList as park}
         <tr>
-          <td> {park} </td>
+          <td> {park.parkName} </td>
+          <td> {park.countyName} </td>
+          <td> {park.lat} </td>
+          <td> {park.lng} </td>
         </tr>
      {/each}
     </tbody>
