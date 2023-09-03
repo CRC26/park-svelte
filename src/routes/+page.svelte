@@ -1,10 +1,10 @@
 <script>
 	import Header from '$lib/Header.svelte';
-	import MainNavigator from '$lib/MainNavigator.svelte';
+	import WelcomeNavigator from '$lib/WelcomeNavigator.svelte';
 </script>
 
 <Header>
-	<MainNavigator />
+	<WelcomeNavigator />
 </Header>
 
 <div class="columns is-vcentered content">

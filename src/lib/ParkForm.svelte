@@ -1,49 +1,74 @@
 
 <script>
   // @ts-nocheck
-	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
 	import { parkService } from "../services/park-service"
 
   let parkName = "";
-  let countyName = "";
+  let rating = "";
+  let countyList = [];
+	let selectedCounty = "";
+
+	let userRating = ["1", "2", "3","4","5"];
+	let selectedRating = "";
   let lat = "";
   let lng = "";
+  let message = "Please add a park";
 
   onMount(async () => {
-    parkList = await parkService.getParks();
-  });
-
+		countyList = await parkService.getCounties();
+	});
+  
   async function addPark() {
-		if (parkName && parkCounty && lat && lng) {
-      const success = await parkService.addPark(parkName, countyName, lat, lng)
+    if (parkName && selectedRating && lat && lng && selectedCounty) {
+      const countyNames = selectedCounty.split(",");
+			const county = countyList.find((county) => county.countyName[1]);
+			const park = {
+				parkName: parkName,
+				rating: selectedRating,
+        lat: lat,
+        lng: lng,
+				county: county._id
+			};
+			const success = await parkService.addPark(parks);
       if (!success) {
-        message = "Park not Added - some error occurred";
-        return;
-      }
-      message = `Thanks! You added ${parkNmae} to the list`;
-    } else {
-      message = "Please fill out form";
-    }
+				message = "park not completed - some error occurred";
+				return;
+			}
+			message = `Thanks! You added ${parkName} to ${county.countyName}`;
+		} else {
+			message = "Please complete the form";
+		}
 	}
 
 </script>
 <form on:submit|preventDefault={addPark}>
-          <div class="field">
-            <label for="parkName" class="label">Park Name</label>
-            <input bind:value={parkName} id="parkName" class="input" type="text" placeholder="Enter park name" name="parkName">
-          </div>
-          <div class="field">
-            <label for="countyName" class="label"> County </label>
-            <input bind:value={countyName}  id="countyName" class="input" type="text" placeholder="Enter county name" name="countyName">
+	<div class="field">
+		<label class="label" for="parkName">Enter Park</label>
+		<input bind:value={parkName} class="input" id="parkName" name="parkName" type="text" />
+	</div>
+  <div class="field">
+    <div class="control">
+      {#each userRating as rating}
+        <input bind:group={selectedRating}  id="countyName" class="radio" type="radio" value={rating} /> {rating}
+      {/each}
           </div>
       <div class="field">
         <label for="lat" class="label">Latitude</label>
-        <input bind:value={lat} id="lat" class="input" type="number" placeholder="Enter Latitude" name="lat">
+        <input bind:value={lat} id="lat" class="input" type="text" placeholder="Enter Latitude" name="lat">
       </div>
       <div class="field">
         <label for="lng" class="label">Longitude</label>
-        <input bind:value={lng} id="lng" class="input" type="number" placeholder="Enter Longitude" name="lng">
+        <input bind:value={lng} id="lng" class="input" type="text" placeholder="Enter Longitude" name="lng">
+      </div>
+      <div class="field">
+        <div class="select">
+          <select bind:value={selectedCounty}>
+            {#each countyList as county}
+              <option>{county.countyName}</option>
+            {/each}
+          </select>
+        </div>
       </div>
       <div class="field">
         <div class="control">

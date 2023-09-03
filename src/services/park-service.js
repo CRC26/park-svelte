@@ -3,7 +3,7 @@
 import axios from "axios";
 import { user } from "../stores";
 
-export const parkService = {
+export const donationService = {
 	baseUrl: "http://localhost:4000",
 
 	async login(email, password) {
@@ -17,7 +17,7 @@ export const parkService = {
 				});
 				localStorage.park = JSON.stringify({ email: email, token: response.data.token });
 				return true;
-			}
+			};
 			return false;
 		} catch (error) {
 			console.log(error);
@@ -48,7 +48,6 @@ export const parkService = {
 			return false;
 		}
 	},
-
 	reload() {
 		const parkCredentials = localStorage.park;
 		if (parkCredentials) {
@@ -60,21 +59,24 @@ export const parkService = {
 			axios.defaults.headers.common["Authorization"] = "Bearer " + savedUser.token;
 		}
 	},
-
-	async addPark(parkName, countyName, lat, lng) {
+	async addPark(park) {
 		try {
-			const parkDetails = {
-				parkName: parkName,
-				countyName: countyName,
-				lat: lat,
-				lng: lng
-			};
-			await axios.post(this.baseUrl + "/api/parks/", parkDetails);
-			return true;
+			const response = await axios.post(this.baseUrl + "/api/counties/" + park.county + "/parks", park);
+			return response.status == 200;
 		} catch (error) {
 			return false;
 		}
 	},
+
+	async getCounties() {
+		try {
+			const response = await axios.get(this.baseUrl + "/api/counties");
+			return response.data;
+		} catch (error) {
+			return [];
+		}
+	},
+
 	async getParks() {
 		try {
 			const response = await axios.get(this.baseUrl + "/api/parks");
@@ -83,6 +85,8 @@ export const parkService = {
 			return [];
 		}
 	},
-
 };
+
+
+
 
