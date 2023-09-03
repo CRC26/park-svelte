@@ -3,7 +3,7 @@
 import axios from "axios";
 import { user } from "../stores";
 
-export const donationService = {
+export const parkService = {
 	baseUrl: "http://localhost:4000",
 
 	async login(email, password) {
@@ -48,6 +48,7 @@ export const donationService = {
 			return false;
 		}
 	},
+	
 	reload() {
 		const parkCredentials = localStorage.park;
 		if (parkCredentials) {
@@ -61,7 +62,7 @@ export const donationService = {
 	},
 	async addPark(park) {
 		try {
-			const response = await axios.post(this.baseUrl + "/api/counties/" + park.county + "/parks", park);
+			const response = await axios.post(this.baseUrl + "/api/county/" + park.county + "/parks", park);
 			return response.status == 200;
 		} catch (error) {
 			return false;
@@ -70,7 +71,7 @@ export const donationService = {
 
 	async getCounties() {
 		try {
-			const response = await axios.get(this.baseUrl + "/api/counties");
+			const response = await axios.get(this.baseUrl + "/api/county");
 			return response.data;
 		} catch (error) {
 			return [];

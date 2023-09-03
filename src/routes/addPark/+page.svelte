@@ -1,7 +1,10 @@
 <script>
+// @ts-nocheck
+
 	import Header from '$lib/Header.svelte';
-	import ParkForm from '$lib/ParkForm.svelte';
+	import AddParkForm from '$lib/AddParkForm.svelte';
 	import MainNavigator from '$lib/MainNavigator.svelte';
+	
 </script>
 
 <Header>
@@ -14,6 +17,6 @@
 	</div>
 	<div class="column box has-text-centered">
 		<h1 class="title is-4">Add a Park</h1>
-		<ParkForm />
+		<AddParkForm />
 	</div>
 </div>

@@ -5,37 +5,35 @@
 	import { parkService } from "../services/park-service"
 
   let parkName = "";
-  let rating = "";
   let countyList = [];
 	let selectedCounty = "";
 
 	let userRating = ["1", "2", "3","4","5"];
 	let selectedRating = "";
-  let lat = "";
-  let lng = "";
+  let lat = "0";
+  let lng = "0";
   let message = "Please add a park";
 
   onMount(async () => {
 		countyList = await parkService.getCounties();
 	});
   
-  async function addPark() {
-    if (parkName && selectedRating && lat && lng && selectedCounty) {
+  async function addPark(park) {
+    if (parkName && selectedRating && selectedCounty) { 
       const countyNames = selectedCounty.split(",");
-			const county = countyList.find((county) => county.countyName[1]);
-			const park = {
+			const county = countyList.find((county) => county.countyFirst == countyNames[0] && county.countySecond == countyNames[1]);
+      const park = {
 				parkName: parkName,
 				rating: selectedRating,
         lat: lat,
         lng: lng,
-				county: county._id
 			};
-			const success = await parkService.addPark(parks);
+			const success = await parkService.addPark(park);
       if (!success) {
 				message = "park not completed - some error occurred";
 				return;
 			}
-			message = `Thanks! You added ${parkName} to ${county.countyName}`;
+			message = `Thanks! You added ${parkName} to ${county.countyFirst} ${county.countySecond}`;
 		} else {
 			message = "Please complete the form";
 		}
@@ -65,7 +63,7 @@
         <div class="select">
           <select bind:value={selectedCounty}>
             {#each countyList as county}
-              <option>{county.countyName}</option>
+              <option>{county.countyFirst},{county.countySecond} </option>
             {/each}
           </select>
         </div>
@@ -76,4 +74,7 @@
         </div>
       </div>
   </form>
+  <div class="box">
+    {message}
+  </div>
 

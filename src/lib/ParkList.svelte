@@ -28,7 +28,7 @@ onMount(async () =>{
           <td> {park.lat} </td>
           <td> {park.lng} </td>
           <td>
-            {park.county.countyName}
+            {park.county.countyFirst},{park.county.countySecond}
          </td>
          <td>
             {park.user.lastName}, {park.user.firstName}
